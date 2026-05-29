@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GNA Company · 온보딩 리뷰 (리드·동료)</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,sans-serif;background:#f0fdfa;color:#0f172a;min-height:100vh}
+/* ── Gate ── */
+.gate{min-height:100vh;background:linear-gradient(160deg,#042f2e 0%,#134e4a 50%,#042f2e 100%);display:flex;align-items:center;justify-content:center;text-align:center;padding:24px}
+.gate h1{font-size:28px;font-weight:800;color:#f0fdfa;margin:0 0 8px}
+.gate .sub{color:#5eead4;font-size:14px;margin:0 0 28px;line-height:1.6;opacity:.7}
+.gate .tag{font-size:13px;letter-spacing:3px;color:#5eead4;margin-bottom:12px;font-weight:600}
+.gate-field{margin-bottom:16px;text-align:left;max-width:320px;width:100%;margin-left:auto;margin-right:auto}
+.gate-label{font-size:12px;color:#5eead4;margin-bottom:6px;font-weight:500;opacity:.8}
+.gate-input{width:100%;padding:14px 18px;border:1.5px solid #115e59;border-radius:12px;background:#042f2e;color:#f0fdfa;font-size:15px;font-family:inherit;outline:none;transition:border .2s}
+.gate-input:focus{border-color:#14b8a6}
+.gate-input::placeholder{color:#0f766e}
+.gate-code{letter-spacing:4px;text-align:center;font-size:18px;text-transform:uppercase}
+.gate-error{color:#fb7185;font-size:13px;margin-top:8px;min-height:20px;text-align:center}
+.gate-btn{padding:12px 32px;border-radius:12px;background:#14b8a6;color:#042f2e;font-size:14px;font-weight:700;border:none;cursor:pointer;font-family:inherit;margin-top:8px;transition:background .2s;width:100%;max-width:320px}
+.gate-btn:hover{background:#2dd4bf}
+/* ── Landing ── */
+.landing{min-height:100vh;background:linear-gradient(160deg,#042f2e 0%,#134e4a 50%,#042f2e 100%);display:flex;align-items:center;justify-content:center;text-align:center;padding:24px}
+.landing h1{font-size:32px;font-weight:800;color:#f0fdfa;margin:0 0 8px}
+.landing .sub{color:#5eead4;font-size:14px;margin:0 0 32px;line-height:1.6;opacity:.7}
+.landing .tag{font-size:13px;letter-spacing:3px;color:#5eead4;margin-bottom:12px;font-weight:600}
+.landing .welcome{color:#2dd4bf;font-size:14px;margin-bottom:28px;font-weight:500}
+.phase-label{font-size:12px;color:#5eead4;opacity:.7;text-align:left;max-width:520px;margin:0 auto 8px;font-weight:600;letter-spacing:1px}
+.mode-btn{width:100%;padding:18px 24px;border-radius:14px;border:1.5px solid #115e59;background:linear-gradient(135deg,#134e4a,#115e59);color:#f0fdfa;font-size:16px;font-weight:700;cursor:pointer;text-align:left;display:flex;align-items:center;justify-content:space-between;transition:border-color .2s;margin-bottom:12px;font-family:inherit}
+.mode-btn:hover{border-color:#14b8a6}
+.mode-btn .desc{font-size:12px;font-weight:400;color:#5eead4;margin-top:4px;opacity:.8}
+.mode-btn .arrow{font-size:22px;color:#2dd4bf}
+.draft-badge{display:inline-block;padding:2px 8px;border-radius:6px;background:#fef3c7;color:#92400e;font-size:11px;font-weight:600;margin-left:8px}
+/* ── Header ── */
+.header{background:#042f2e;padding:16px 24px;position:sticky;top:0;z-index:20}
+.header-inner{max-width:720px;margin:0 auto}
+.header .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.header .brand{font-size:11px;letter-spacing:2px;color:#0d9488}
+.header h2{margin:2px 0 0;font-size:17px;font-weight:700;color:#f0fdfa}
+.header-btns{display:flex;gap:8px}
+.exit-btn,.save-btn{background:none;border:1px solid #115e59;border-radius:8px;padding:6px 14px;color:#5eead4;font-size:12px;cursor:pointer;font-family:inherit;transition:all .2s}
+.save-btn{border-color:#0d9488;color:#2dd4bf}
+.save-btn:hover{background:#0d9488;color:#042f2e}
+.progress-bar{height:3px;background:#134e4a;border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#14b8a6,#5eead4);border-radius:2px;transition:width .4s ease}
+/* ── Section Nav (sticky pills) ── */
+.section-nav{position:sticky;top:68px;z-index:15;background:rgba(240,253,250,.95);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid #ccfbf1;padding:10px 0;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.section-nav::-webkit-scrollbar{display:none}
+.nav-inner{max-width:720px;margin:0 auto;padding:0 20px;display:flex;gap:6px}
+.nav-pill{flex-shrink:0;padding:6px 14px;font-size:12px;font-weight:600;color:#5b7c79;background:#fff;border:1.5px solid #ccfbf1;border-radius:20px;cursor:pointer;transition:all .15s;white-space:nowrap;font-family:inherit}
+.nav-pill:hover{border-color:#5eead4;color:#0d9488}
+.nav-pill.active{background:#14b8a6;color:#fff;border-color:#14b8a6}
+.nav-pill.filled{background:#ecfdf5;color:#059669;border-color:#6ee7b7}
+/* ── Content ── */
+.content{max-width:720px;margin:0 auto;padding:24px 20px 80px}
+/* ── Phase banner ── */
+.phase-banner{background:linear-gradient(135deg,#0d9488,#14b8a6);border-radius:14px;padding:14px 20px;margin-bottom:20px;color:#fff}
+.phase-banner .pb-t{font-size:14px;font-weight:800;margin-bottom:2px}
+.phase-banner .pb-d{font-size:12px;opacity:.9;line-height:1.5}
+/* ── Card ── */
+.card{background:#fff;border-radius:16px;border:1px solid #d1ece8;overflow:hidden;margin-bottom:20px;box-shadow:0 1px 4px rgba(13,148,136,.05);scroll-margin-top:120px}
+.card-header{padding:18px 24px;border-bottom:1px solid #f0fdfa;background:#fafefd;display:flex;align-items:center;justify-content:space-between}
+.card-header h3{font-size:16px;font-weight:700}
+.card-header .step{font-size:12px;color:#5b7c79}
+.card-sub{font-size:13px;color:#5b7c79;margin-top:4px}
+.card-body{padding:20px 24px}
+/* ── Fields ── */
+.field{margin-bottom:20px}
+.field:last-child{margin-bottom:0}
+.field label{display:block;font-size:14px;font-weight:600;color:#0f172a;margin-bottom:6px;line-height:1.5;white-space:pre-line}
+.field-hint{font-size:12.5px;color:#0d9488;background:#f0fdfa;border:1px solid #ccfbf1;border-radius:8px;padding:8px 11px;margin-bottom:8px;line-height:1.55;white-space:pre-line}
+/* 점수화 UI */
+.score-label{font-size:13px;font-weight:700;color:#0f172a;margin:6px 0 8px}
+.rubric-grid{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.rubric-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1.5px solid #e2e8f0;border-radius:10px;background:#fff;cursor:pointer;transition:all .12s}
+.rubric-item:hover{border-color:#5eead4}
+.rubric-item.active{border-color:#0d9488;background:#f0fdfa}
+.rb-n{flex-shrink:0;font-size:13px;font-weight:800;color:#0d9488;min-width:30px}
+.rb-d{font-size:12.5px;color:#334155;line-height:1.45}
+.add-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:16px}
+.add-item{padding:10px 8px;border:1.5px solid #e2e8f0;border-radius:10px;background:#fff;cursor:pointer;text-align:center;transition:all .12s}
+.add-item:hover{border-color:#5eead4}
+.add-item.active{border-color:#7c3aed;background:#f5f3ff}
+.ad-v{display:block;font-size:14px;font-weight:800;color:#7c3aed}
+.ad-l{display:block;font-size:12px;font-weight:600;color:#1e293b;margin-top:2px}
+.ad-d{display:block;font-size:10.5px;color:#94a3b8;margin-top:2px;line-height:1.3}
+.axis-score{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 14px;border-radius:10px;background:#0f172a;color:#f8fafc}
+.as-label{font-size:12px;color:#94a3b8}
+.as-val{font-size:18px;font-weight:800;color:#2dd4bf}
+.as-nomid{font-size:11px;color:#64748b}
+.delta{font-size:12px;font-weight:700;padding:3px 9px;border-radius:20px}
+.delta-up{background:#052e2b;color:#34d399}
+.delta-down{background:#3f1d1d;color:#f87171}
+.delta-same{background:#1e293b;color:#cbd5e1}
+.delta-none{background:#1e293b;color:#94a3b8}
+/* 종합 대시보드 */
+.dash{padding:20px;border-radius:14px;background:linear-gradient(160deg,#0f172a,#134e4a);color:#f8fafc;margin-bottom:20px}
+.dash-total{text-align:center;margin-bottom:4px}
+.dt-num{font-size:46px;font-weight:800;color:#2dd4bf;line-height:1}
+.dt-max{font-size:18px;color:#64748b}
+.dash-grade{text-align:center;font-size:14px;font-weight:700;color:#5eead4;margin-bottom:18px}
+.dash-list{display:flex;flex-direction:column;gap:9px}
+.dash-row{display:flex;align-items:center;gap:10px}
+.dr-name{flex-shrink:0;width:88px;font-size:12px;color:#cbd5e1}
+.dr-bar{flex:1;height:9px;border-radius:5px;background:#1e293b;overflow:hidden}
+.dr-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,#0d9488,#2dd4bf);transition:width .4s}
+.dr-val{flex-shrink:0;width:26px;text-align:right;font-size:13px;font-weight:700;color:#f8fafc}
+.dr-delta{flex-shrink:0;width:34px;text-align:right;font-size:11px;font-weight:700}
+.dash-compare{margin-top:16px;padding-top:14px;border-top:1px solid #1e3a37;text-align:center;font-size:13px;font-weight:600;color:#5eead4}
+@media(max-width:480px){.add-row{grid-template-columns:1fr}}
+.field input::placeholder,.field textarea::placeholder{color:#94c9c2}
+.field .req{color:#ef4444}
+.field input,.field textarea{width:100%;padding:10px 14px;border:1.5px solid #d1ece8;border-radius:10px;font-size:14px;font-family:inherit;background:#fafefd;transition:border .2s;outline:none}
+.field textarea{resize:vertical;line-height:1.7;min-height:120px}
+.field input:focus,.field textarea:focus{border-color:#14b8a6}
+/* ── Guide Box ── */
+.guide-box{padding:16px;border-radius:12px;background:#f0fdfa;border:1px solid #ccfbf1;margin-bottom:20px}
+.guide-box .title{font-size:13px;font-weight:700;color:#0f766e;margin-bottom:10px}
+.guide-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.guide-num{width:26px;height:26px;border-radius:8px;background:#14b8a6;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+.guide-text{font-size:12px;color:#334155}
+.guide-text strong{color:#0f172a}
+.guide-text span{color:#5b7c79}
+/* ── Grade ── */
+.grade-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.grade-item{padding:10px 14px;border-radius:10px;background:#fff;border:2px solid #d1ece8;cursor:pointer;transition:all .15s}
+.grade-item:hover{border-color:#5eead4}
+.grade-item.active{border-color:#14b8a6;background:#f0fdfa}
+.grade-item .g{font-size:14px;font-weight:800;color:#0d9488}
+.grade-item .gl{font-size:12px;font-weight:600;color:#0f172a;margin-left:4px}
+.grade-item .gd{font-size:11px;color:#5b7c79;margin-top:3px;line-height:1.4}
+/* ── Hire decision ── */
+.hire-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.hire-item{padding:14px 10px;border-radius:10px;background:#fff;border:2px solid #d1ece8;cursor:pointer;transition:all .15s;text-align:center}
+.hire-item:hover{border-color:#5eead4}
+.hire-item.active.fit{border-color:#059669;background:#ecfdf5}
+.hire-item.active.hold{border-color:#d97706;background:#fffbeb}
+.hire-item.active.unfit{border-color:#dc2626;background:#fef2f2}
+.hire-item .hl{font-size:14px;font-weight:800;color:#0f172a}
+.hire-item .hd{font-size:11px;color:#5b7c79;margin-top:3px;line-height:1.3}
+/* ── Goal achievement ── */
+.goal-rate{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.goal-rate input{width:120px;text-align:center;font-size:18px;font-weight:800;color:#0d9488}
+.goal-rate .unit{font-size:16px;font-weight:700;color:#0f766e}
+/* ── Core Value ── */
+.cv-card{padding:20px;border-radius:14px;margin-bottom:16px}
+.cv-title{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.cv-title .kr{font-size:20px;font-weight:800}
+.cv-title .en{font-size:13px;opacity:.7;font-weight:500}
+.cv-behaviors{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
+.cv-behaviors span{padding:3px 10px;border-radius:6px;border:none;font-size:11px;color:#5b7c79}
+.cv-q{font-size:13px;font-weight:600;color:#0f172a;margin-bottom:6px}
+.scale-row{display:flex;gap:8px;margin:8px 0 16px;flex-wrap:wrap}
+.scale-btn{width:52px;padding:8px 0;border-radius:10px;border:2px solid #d1ece8;background:#fff;color:#5b7c79;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:inherit}
+.scale-btn.active{color:#fff}
+.scale-btn .sl{font-size:9px;font-weight:500;opacity:.9}
+/* ── Submit Bar ── */
+.submit-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #d1ece8;padding:12px 20px;z-index:10}
+.submit-inner{max-width:720px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+.submit-info{font-size:12px;color:#5b7c79}
+.submit-info .count{font-weight:700;color:#0d9488}
+.submit-info .done-count{color:#059669}
+.btn-submit{padding:10px 32px;border-radius:10px;border:none;background:#14b8a6;color:#fff;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-submit:hover{background:#0d9488}
+.btn-submit:disabled{background:#cbd5e1;cursor:default}
+/* ── Toast ── */
+.saved-toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#059669;color:#fff;padding:10px 24px;border-radius:10px;font-size:13px;font-weight:600;z-index:100;animation:fadeout 2s forwards}
+@keyframes fadeout{0%,70%{opacity:1}100%{opacity:0}}
+/* ── Done ── */
+.done{min-height:100vh;background:linear-gradient(160deg,#042f2e 0%,#134e4a 50%,#042f2e 100%);display:flex;align-items:center;justify-content:center;text-align:center;padding:24px}
+.done .icon{font-size:56px;margin-bottom:16px}
+.done h2{color:#f0fdfa;font-size:24px;font-weight:800;margin:0 0 8px}
+.done p{color:#5eead4;font-size:14px;margin:0 0 32px;line-height:1.6;opacity:.8}
+.done button{padding:14px 32px;border-radius:12px;background:#14b8a6;color:#042f2e;font-size:14px;font-weight:700;border:none;cursor:pointer;font-family:inherit}
+/* ── Section Divider ── */
+.section-divider{height:4px;border-radius:2px;margin:8px 0 20px;background:linear-gradient(90deg,#14b8a622,#14b8a608)}
+/* ── Scroll to top ── */
+.scroll-top{position:fixed;bottom:70px;right:20px;width:40px;height:40px;border-radius:50%;background:#14b8a6;color:#fff;border:none;cursor:pointer;font-size:18px;display:none;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(20,184,166,.3);z-index:10;transition:opacity .2s}
+.scroll-top.show{display:flex}
+@media(max-width:480px){
+.landing h1,.gate h1{font-size:26px}
+.grade-grid,.hire-grid{grid-template-columns:1fr}
+.scale-row{gap:5px}
+.scale-btn{width:44px;font-size:12px}
+.nav-pill{padding:5px 11px;font-size:11px}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<button class="scroll-top" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<script>
+// ═══ 설정 ═══
+const SHEET_WEBHOOK_URL = ""; // ★ 셀프·평가자 두 파일에 동일한 Apps Script URL을 넣으면 하나의 시트로 응답이 모입니다
+const CODE_EXPIRY_DATE = "2026-12-31";
+const AUTH = {
+"wb@gna.company":"BP7IQS","kai.kim@gna.company":"5TS5PI","jay.heo@gna.company":"RYW7EW",
+"faye.kang@gna.company":"X1738Z","min@gna.company":"58UDDF","angelique.li@gna.company":"ZM0OCC",
+"rosea.li@gna.company":"0V14FZ"
+// ↑ 연봉재계약 리뷰와 동일한 AUTH 테이블을 그대로 붙여넣어 사용하세요.
+};
+
+// ═══ 핵심가치 Data ═══
+const CV=[
+{en:"Integrity",kr:"솔직",color:"#0D9488",bg:"#F0FDFA",border:"#99F6E4",beh:["선명한 직언은 성장의 밑거름","오해의 소지는 만나서","가감 없이, 무례하지 않게","솔직하게 한 걸음씩"]},
+{en:"Ownership",kr:"오너십",color:"#7C3AED",bg:"#F5F3FF",border:"#DDD6FE",beh:["플레이오가 나의 자랑이 되도록","나다 싶으면 내가","모든 일은 나의 커리어"]},
+{en:"Courage",kr:"용기",color:"#DC2626",bg:"#FEF2F2",border:"#FECACA",beh:["실패는 또 다른 시작점","주저함은 기회를 놓칠 뿐","변화의 시작은 해오던 일로부터"]},
+];
+// 핵심가치 점수 척도 (연봉재계약과 동일)
+const SI=[{n:1,l:"인지 단계",d:"가치를 이해하고 있으나, 업무에서 실천으로 이어지지 못한 단계"},{n:2,l:"시도 단계",d:"실천을 시도하고 있으나, 상황에 따라 일관성이 부족한 단계"},{n:3,l:"실천 단계",d:"업무 중 해당 가치를 의식하고 꾸준히 실천하는 단계"},{n:4,l:"적극적 실천",d:"가치를 자연스럽게 업무에 녹여내며, 주도적으로 실천하는 단계"},{n:5,l:"팀에 전파",d:"본인의 실천을 넘어 동료에게도 긍정적 영향을 주는 단계"}];
+
+// 온보딩 역량 점수 척도 (수습 단계 적합)
+const OS=[{n:1,l:"기대 미달",d:"기대 수준에 크게 못 미치며, 즉각적인 개선이 필요한 단계"},{n:2,l:"보완 필요",d:"일부 가능성은 보이나, 여러 영역에서 보완이 필요한 단계"},{n:3,l:"기대 충족",d:"수습 단계에서 기대하는 수준을 안정적으로 충족하는 단계"},{n:4,l:"기대 상회",d:"기대 수준을 넘어 빠르게 적응하고 주도적으로 기여하는 단계"},{n:5,l:"탁월",d:"수습 기간임에도 정규 구성원 이상의 탁월한 모습을 보이는 단계"}];
+
+// 본채용 등급
+const GG=[{g:"A",l:"기대를 크게 상회",d:"수습 기간 동안 기대 이상의 적응과 성과를 보였으며, 즉시 핵심 기여자로 활약 가능"},{g:"B",l:"안정적으로 적합",d:"수습 목표를 충실히 달성했고, 신뢰할 수 있는 정규 구성원으로 함께할 수 있음"},{g:"C",l:"조건부/추가 관찰 필요",d:"일부 강점은 있으나, 본채용 전 보완·확인이 필요한 영역이 남아있음"},{g:"D",l:"기대에 미흡",d:"수습 목표 대비 적응·성과가 크게 부족하여 본채용이 어려움"}];
+
+// 본채용 의견
+const HIRE=[{v:"적합",cls:"fit",l:"적합",d:"정규 동료로 함께"},{v:"보류",cls:"hold",l:"보류",d:"추가 관찰 필요"},{v:"부적합",cls:"unfit",l:"부적합",d:"본채용 어려움"}];
+
+// ═══ 점수화 모델 ═══════════════════════════════════════════
+// 5개 평가축 × 20점 = 100점. 각 문항: 기본점수(1~5 루브릭) + (평가자) 시도 추가점(0~2)
+// 셀프:  기본점수 ×4              = 최대 20점
+// 평가자: (기본점수 + 추가점) ×... → 환산해 최대 20점 (아래 scoreOf 참고)
+// 5점 루브릭 라벨 (축마다 문구가 달라 RUBRIC에 정의)
+const ADD=[{v:2,l:"적극 시도",d:"스스로 방법을 찾아 끝까지 실행"},{v:1,l:"일부 시도",d:"시도는 했으나 제한적"},{v:0,l:"시도 없음",d:"별다른 시도가 없었음"}];
+
+// 평가축 5개 (혼합형: 성과·문제해결·협업·학습·핵심가치)
+const AXES=[
+  {key:"perf",icon:"🎯",t:"성과 & 목표 기여",max:20,
+    selfQ:"수습 목표 및 맡은 업무에서 어떤 결과를 만들었는지, 구체적 사례·숫자와 함께 적어주세요.",
+    evalQ:"대상자가 수습 목표·업무에서 만든 결과와 기여 수준을 구체적으로 적어주세요.",
+    ph:"예) 담당 채널 단독 운영 도달, 주간 리포트 정례화, ○○ 캠페인 클릭률 △% 개선",
+    point:"“열심히 했다” X, “어떤 결과를 만들었나” O",
+    rubric:["기대 이상의 성과를 내고 팀 성과에도 기여함","목표를 안정적으로 달성함","기대하는 수준의 결과를 만듦","일부 결과를 만들었고 보완할 여지가 있음","결과를 만들기까지 지원이 더 필요함"]},
+  {key:"prob",icon:"🧩",t:"문제 해결력 & 미달성 대응",max:20,
+    selfQ:"미달성 목표가 있다면 원인과 해결 시도를 적어주세요. (없다면 리스크에 대응했던 사례)",
+    evalQ:"대상자가 미달성·문제 상황에서 원인을 어떻게 다루고 해결을 시도했는지 적어주세요.",
+    ph:"예) ○○ 목표가 늦어진 원인을 △△로 분석하고, □□를 시도해 일부 회복했습니다.",
+    point:"“못했다” X, “문제를 어떻게 다루는 사람인가” O",
+    rubric:["원인을 구조적으로 분석하고 해결책을 실행함","원인을 분석하고 해결 방향을 제시함","원인을 파악해 설명할 수 있음","원인을 부분적으로 파악하며 보완할 여지가 있음","원인 파악과 대응에 지원이 더 필요함"]},
+  {key:"collab",icon:"🤝",t:"협업 & 신뢰",max:20,
+    selfQ:"협업하며 신뢰를 쌓기 위해 한 행동(정보 공유, 약속 이행, 피드백 수용 등)을 적어주세요.",
+    evalQ:"대상자가 협업·소통에서 신뢰를 주는 행동을 보였는지 사례로 적어주세요.",
+    ph:"예) 진행 상황을 선제적으로 공유하고, 받은 피드백을 다음 업무에 빠르게 반영함.",
+    point:"“사이가 좋다” X, “함께 일할 때 믿을 수 있나” O",
+    rubric:["주도적으로 신뢰를 쌓고 팀 협업에 기여함","안정적으로 신뢰를 주며 협업함","기대하는 수준으로 협업함","일부 상황에서 협업하며 보완할 여지가 있음","협업 방식에 지원이 더 필요함"]},
+  {key:"learn",icon:"📈",t:"학습 & 개선",max:20,
+    selfQ:"일을 더 잘하기 위해 새로 배우거나 방식을 바꿔 개선한 것을 적어주세요. (AI·자동화 포함)",
+    evalQ:"대상자가 스스로 학습하고 개선·시도하는 태도를 보였는지 적어주세요.",
+    ph:"예) 반복 작업을 ○○로 자동화해 처리 시간을 △ 줄였습니다.",
+    point:"“시키는 걸 했다” X, “스스로 나아지려 하나” O",
+    rubric:["스스로 학습해 눈에 띄는 개선을 만듦","개선을 시도하고 일부 성과를 냄","기대하는 수준으로 학습·개선함","피드백을 받으면 개선하며 보완할 여지가 있음","학습·개선에 지원이 더 필요함"]},
+  {key:"value",icon:"💎",t:"핵심가치 실천 (솔직·오너십·용기)",max:20,
+    selfQ:"솔직·오너십·용기 중 가장 잘 실천했다고 생각하는 가치와 그 사례를 적어주세요.",
+    evalQ:"대상자가 핵심가치(솔직·오너십·용기)를 업무에서 실천했는지 사례로 적어주세요.",
+    ph:"예) 막히는 부분을 숨기지 않고 바로 공유했고(솔직), 맡은 일을 끝까지 챙겼습니다(오너십).",
+    point:"태도·마인드셋이 조직 방향성과 맞는가",
+    rubric:["가치를 체화해 동료에게도 긍정적 영향을 줌","가치를 자연스럽게 업무에 녹여 실천함","기대하는 수준으로 꾸준히 실천함","일부 상황에서 실천하며 보완할 여지가 있음","가치 실천에 지원이 더 필요함"]},
+];
+
+// 점수 계산
+// 셀프:  기본점수(1~5) × 4         = 4·8·12·16·20
+// 평가자: (기본점수 + 시도추가점) × 3, 상한 20  (예: 5+2→20, 4+1→15, 3+0→9)
+function axisScore(ax,m){
+  const base=D[ax.key+'_base'];
+  if(!base)return null;
+  if(m==='self') return base*4;
+  const add=D[ax.key+'_add']!==undefined?D[ax.key+'_add']:0;
+  return Math.min(ax.max, (base+add)*3);
+}
+function totalScore(m){
+  let sum=0,done=0;
+  AXES.forEach(ax=>{const s=axisScore(ax,m);if(s!==null){sum+=s;done++}});
+  return {sum,done,complete:done===AXES.length};
+}
+// 총점 → 본채용 권장 등급
+function gradeOf(total){
+  if(total>=85)return GG[0];
+  if(total>=70)return GG[1];
+  if(total>=55)return GG[2];
+  return GG[3];
+}
+
+// ═══ 공통 기본정보 섹션 ═══
+function infoSec(mode){
+  if(mode==='self') return {id:"info",t:"기본 정보",nav:"기본정보",f:[
+    {k:"name",l:"영어 닉네임(영어)",tp:"text",hint:"작성 예시: rosea"},
+    {k:"team",l:"소속(팀명/스쿼드)",tp:"text"},
+    {k:"joinDate",l:"입사일",tp:"date"}]};
+  return {id:"info",t:"기본 정보",nav:"기본정보",f:[
+    {k:"targetName",l:"대상자 이름(닉네임)",tp:"text"},
+    {k:"targetEmail",l:"대상자 이메일",tp:"email"},
+    {k:"targetTeam",l:"대상자 소속(팀명/스쿼드)",tp:"text"},
+    {k:"joinDate",l:"대상자 입사일",tp:"date"},
+    {k:"reviewerName",l:(mode==='lead'?'리드':'동료')+" 이름(닉네임)",tp:"text"},
+    {k:"reviewerTeam",l:(mode==='lead'?'리드':'동료')+" 소속(팀명/스쿼드)",tp:"text"}]};
+}
+
+// ═══ 핵심가치 / 종합 섹션 빌더 ═══
+function cvSec(mode){return {id:"cv",t:(mode==='self'?"핵심가치 자가 평가":"핵심가치 평가"),nav:"핵심가치",sub:"GNA의 3대 핵심가치(솔직·오너십·용기) 실천 정도를 평가해 주세요.",tp:"cv",mode:mode}}
+
+// ═══ 중간 리뷰 (MID) ═══
+function midSections(mode){
+  const self=mode==='self';
+  const S=[infoSec(mode)];
+  // 1) 수습 목표 설정
+  S.push({id:"m0",t:"Section 1. 수습기간 목표 설정",nav:"수습 목표",sub:self?"남은 수습 기간 동안 무엇을 해낼지 목표를 먼저 정합니다. 마무리 리뷰에서 이 목표를 기준으로 평가합니다.":"대상자가 남은 수습 기간 동안 달성할 목표를 합의해 작성해 주세요. 마무리 리뷰에서 이 목표를 기준으로 평가합니다.",tp:"goalset",mode:mode,f:[
+    {k:"goalText",l:self?"📌 수습기간 목표 기재":"📌 대상자의 수습기간 목표 기재",hint:"리드(팀·스쿼드)와 합의해 작성합니다. '무엇을·언제까지·어느 수준으로'가 보이도록 적으면 마무리 때 점수를 매기기 쉬워요. 1~3개 권장. (링크 대체 가능)",ph:"예) ① 담당 채널 단독 운영 (~6월 말)\n② 주간 리포트 정례화 및 공유\n③ ○○ 캠페인 1건 직접 운영(리드는 검토만)",tp:"ta"}]});
+  // 2) 점수화 평가 5축
+  AXES.forEach((ax,i)=>S.push(scoreSec(ax,i+2,mode,'mid')));
+  return S;
+}
+
+// ═══ 마무리 리뷰 (FINAL) ═══
+function finalSections(mode){
+  const self=mode==='self';
+  const S=[infoSec(mode)];
+  // 1) 수습 목표 달성 - 무엇을 했나
+  S.push({id:"f0",t:"Section 1. 수습 목표 — 무엇을 했나",nav:"목표 달성",sub:self?"중간 리뷰에서 정한 목표를 기준으로, 그 목표를 위해 실제로 무엇을 했는지 적어주세요.":"중간 리뷰에서 설정한 목표를 기준으로, 대상자가 그 목표를 위해 무엇을 했는지 평가해 주세요. 본채용 판단의 핵심 근거가 됩니다.",tp:"goal",mode:mode,f:[
+    {k:"goalRef",l:self?"중간 리뷰에서 정했던 나의 수습 목표":"중간 리뷰에서 설정한 대상자의 수습 목표",hint:"중간 리뷰의 목표를 옮겨 적거나 링크를 붙여주세요.",ph:"예) ① 담당 채널 단독 운영  ② 주간 리포트 정례화  ③ ○○ 캠페인 직접 운영",tp:"ta"},
+    {k:"goalReason",l:self?"그 목표를 이루기 위해 구체적으로 무엇을 했나요?":"대상자가 그 목표를 이루기 위해 구체적으로 무엇을 했나요?",hint:"목표별로 '한 행동 → 결과' 순서로. 미달한 목표는 원인·시도를 함께 적으면 됩니다.",ph:"예) ① 채널 운영 — 매뉴얼을 직접 정리해 현재 단독 수행.\n② 리포트 — 정례화 완료, 매주 공유 중.\n③ 캠페인 — 1건 직접 운영, 클릭률 ○○% 개선.",tp:"ta"}]});
+  // 2) 점수화 평가 5축 (중간 점수 대비 변화 표시)
+  AXES.forEach((ax,i)=>S.push(scoreSec(ax,i+2,mode,'final')));
+  // 3) 종합 + (평가자) 본채용 의견
+  S.push({id:"f9",t:"Section 7. 종합 평가"+(self?"":" & 본채용 의견"),nav:self?"종합 평가":"종합·본채용",sub:self?"수습 기간을 마무리하며 스스로를 돌아봐 주세요.":"총점을 확인하고, 본채용 적합 여부를 판단해 주세요.",tp:"final",mode:mode,f:[
+    {k:"f9q1",l:self?"내 점수에 대한 생각과, 앞으로 더 성장시키고 싶은 부분을 적어주세요.":"총점·본채용 의견의 근거를 적어주세요.",hint:self?"잘한 점과 앞으로의 방향을 함께 적으면 됩니다.":"보류·부적합일 경우 주요 사유를 반드시 작성해 주세요. 점수가 낮은 축과 연결해 적으면 근거가 분명해집니다.",ph:self?"예) 성과·협업은 자신 있고, 문제 해결력은 더 키우고 싶습니다.":"예) 협업·성과 우수, 문제해결은 중간 대비 개선됨. 정규 전환 적합.",tp:"ta"}]});
+  return S;
+}
+
+// 점수 섹션 빌더: 한 축 = 점수 선택 + 서술형
+function scoreSec(ax,sectionNo,mode,phaseTag){
+  return {id:"ax_"+ax.key,t:"Section "+sectionNo+". "+ax.t,nav:ax.t.split(' ')[0],
+    tp:"score",mode:mode,ax:ax,phaseTag:phaseTag};
+}
+
+function getSections(){
+  if(!phase||!mode)return[];
+  return phase==='mid'?midSections(mode):finalSections(mode);
+}
+
+// ═══ State ═══
+let D={},track=null,phase=null,mode=null,authEmail='',submitted=false,saving=false,activeNav=0;
+function draftKey(){return 'gna_ob_draft_'+phase+'_'+mode+'_'+authEmail}
+function saveDraft(){if(!phase||!mode||!authEmail)return;try{localStorage.setItem(draftKey(),JSON.stringify({data:D,ts:Date.now()}))}catch(e){}}
+function loadDraft(){try{const raw=localStorage.getItem(draftKey());if(!raw)return null;return JSON.parse(raw)}catch(e){return null}}
+function clearDraft(){try{localStorage.removeItem(draftKey())}catch(e){}}
+function hasDraft(p,m){try{return!!localStorage.getItem('gna_ob_draft_'+p+'_'+m+'_'+authEmail)}catch(e){return false}}
+function showToast(msg){const t=document.createElement('div');t.className='saved-toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2200)}
+setInterval(()=>{if(phase&&mode&&authEmail&&!submitted){saveDraft()}},30000);
+
+// ═══ 섹션 완료 체크 ═══
+function isSectionFilled(sec){
+  if(sec.tp==='cv') return CV.every(v=>D[v.en+'_score']&&(D[v.en+'_text']||'').trim());
+  if(sec.tp==='goalset') return sec.f.every(f=>(D[f.k]||'').trim());
+  if(sec.tp==='goal') return sec.f.every(f=>(D[f.k]||'').trim());
+  if(sec.tp==='score'){
+    const ax=sec.ax,base=D[ax.key+'_base'],txt=(D[ax.key+'_text']||'').trim();
+    if(sec.mode==='self') return !!base&&!!txt;
+    return !!base&&D[ax.key+'_add']!==undefined&&!!txt;
+  }
+  if(sec.tp==='final') return (sec.mode==='self'||D.hire)&&sec.f&&sec.f.every(f=>(D[f.k]||'').trim());
+  if(sec.f) return sec.f.filter(f=>!f.opt).every(f=>(D[f.k]||'').trim());
+  return false;
+}
+function allFilled(){return getSections().every(s=>isSectionFilled(s))}
+function filledCount(){return getSections().filter(s=>isSectionFilled(s)).length}
+
+// ═══ Helpers ═══
+function h(t,a,...ch){const e=document.createElement(t);if(a)Object.entries(a).forEach(([k,v])=>{if(k==='style'&&typeof v==='object')Object.assign(e.style,v);else if(k.startsWith('on'))e.addEventListener(k.slice(2).toLowerCase(),v);else if(k==='className')e.className=v;else e.setAttribute(k,v)});ch.flat(Infinity).forEach(x=>{if(x!=null)e.appendChild(typeof x==='string'?document.createTextNode(x):x)});return e}
+
+// 중간 리뷰 점수 스냅샷 조회 (같은 작성자·같은 트랙의 mid 점수)
+function midSnapshotKey(m){return 'gna_ob_midscore_'+m+'_'+authEmail}
+function loadMidScores(m){try{const raw=localStorage.getItem(midSnapshotKey(m));return raw?JSON.parse(raw):null}catch(e){return null}}
+
+// ═══ Submit ═══
+async function submit(){
+  if(!allFilled()){showToast('⚠️ 미작성 항목이 있습니다');return}
+  if(!confirm('제출하시겠습니까? 제출 후에는 수정할 수 없습니다.'))return;
+  saving=true;updateSubmitBar();
+  const tot=totalScore(mode);
+  const scores={};AXES.forEach(ax=>scores[ax.key]=axisScore(ax,mode));
+  const ts=new Date().toISOString(),p={...D,_form:'eval',_phase:phase,_type:mode,_email:authEmail,_total:tot.sum,_scores:scores,_timestamp:ts};
+  try{localStorage.setItem('gna_ob_'+phase+'_'+mode+'_'+ts,JSON.stringify(p))}catch(e){}
+  // 중간 리뷰면, 마무리에서 비교할 수 있도록 점수 스냅샷 저장
+  if(phase==='mid')try{localStorage.setItem(midSnapshotKey(mode),JSON.stringify({scores,total:tot.sum,ts}))}catch(e){}
+  if(SHEET_WEBHOOK_URL)try{await fetch(SHEET_WEBHOOK_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)})}catch(e){}
+  clearDraft();saving=false;submitted=true;R();
+}
+
+// ═══ Renderers ═══
+function rScaleGuide(scale){
+  const b=h('div',{className:'guide-box'});
+  b.appendChild(h('div',{className:'title'},'평가 단계 기준'));
+  scale.forEach(s=>{const r=h('div',{className:'guide-row'});r.appendChild(h('div',{className:'guide-num'},String(s.n)));const t=h('div',{className:'guide-text'});t.appendChild(h('strong',null,s.l));t.appendChild(h('span',null,' — '+s.d));r.appendChild(t);b.appendChild(r)});
+  return b;
+}
+function rHire(){
+  const b=h('div',{className:'guide-box'});
+  b.appendChild(h('div',{className:'title'},'본채용 의견 *'));
+  const g=h('div',{className:'hire-grid'});
+  HIRE.forEach(x=>{
+    const a=D.hire===x.v;
+    const i=h('div',{className:'hire-item '+x.cls+(a?' active':''),onClick:()=>{D.hire=x.v;reRenderSection('f9');updateNav();updateSubmitBar()}});
+    i.appendChild(h('div',{className:'hl'},x.l));i.appendChild(h('div',{className:'hd'},x.d));
+    g.appendChild(i);
+  });
+  b.appendChild(g);return b;
+}
+function rField(f){
+  const d=h('div',{className:'field'}),l=h('label',null,f.l);
+  if(!f.opt)l.appendChild(h('span',{className:'req'},' *'));
+  d.appendChild(l);
+  if(f.hint)d.appendChild(h('p',{className:'field-hint'},f.hint));
+  if(f.tp==='ta'){
+    const t=h('textarea',{rows:'5'});t.value=D[f.k]||'';
+    if(f.ph)t.setAttribute('placeholder',f.ph);
+    t.addEventListener('input',e=>{D[f.k]=e.target.value;updateNav();updateSubmitBar()});d.appendChild(t);
+  }else{
+    const i=h('input',{type:f.tp});i.value=D[f.k]||'';
+    if(f.ph)i.setAttribute('placeholder',f.ph);
+    i.addEventListener('input',e=>{D[f.k]=e.target.value;updateNav();updateSubmitBar()});d.appendChild(i);
+  }
+  return d;
+}
+function rCV(cv,m){
+  const card=h('div',{className:'cv-card',style:{background:cv.bg,border:'1.5px solid '+cv.border}});
+  const ti=h('div',{className:'cv-title'});
+  ti.appendChild(h('span',{className:'kr',style:{color:cv.color}},cv.kr));
+  ti.appendChild(h('span',{className:'en',style:{color:cv.color}},cv.en));
+  card.appendChild(ti);
+  const be=h('div',{className:'cv-behaviors'});cv.beh.forEach(b=>be.appendChild(h('span',null,b)));card.appendChild(be);
+  const sk=cv.en+'_score',tk=cv.en+'_text';
+  const ql=m==='self'?`"${cv.kr}" 가치를 얼마나 잘 실천했나요?`:`이 동료는 "${cv.kr}" 가치를 얼마나 잘 실천했나요?`;
+  const q1=h('div',{className:'cv-q'},ql);q1.appendChild(h('span',{className:'req'},' *'));card.appendChild(q1);
+  const sr=h('div',{className:'scale-row'});
+  SI.forEach(s=>{
+    const a=D[sk]===s.n;
+    const b=h('button',{className:'scale-btn'+(a?' active':''),style:a?{background:cv.color,borderColor:cv.color,color:'#fff'}:{},
+      onClick:()=>{D[sk]=s.n;reRenderSection('cv');updateNav();updateSubmitBar()}});
+    b.appendChild(h('span',null,String(s.n)));b.appendChild(h('span',{className:'sl'},s.l));sr.appendChild(b);
+  });
+  card.appendChild(sr);
+  const el=m==='self'?'위 점수를 준 이유를, 실제 있었던 일 한 가지로 적어주세요.':'위 점수의 근거가 되는 구체적 사례를 적어주세요.';
+  const q2=h('div',{className:'cv-q'},el);q2.appendChild(h('span',{className:'req'},' *'));card.appendChild(q2);
+  const cvPh={Integrity:(m==='self'?'예) 진행이 막혔을 때 숨기지 않고 바로 공유해 함께 방향을 잡았습니다.':'예) 문제를 빠르게 드러내고 솔직하게 공유함.'),Ownership:(m==='self'?'예) 맡은 일을 끝까지 챙기고, 빈틈이 보이면 먼저 손들어 처리했습니다.':'예) 본인 일로 여기고 끝까지 책임지는 모습을 보임.'),Courage:(m==='self'?'예) 익숙하지 않은 일이었지만 먼저 해보겠다고 나섰습니다.':'예) 새로운 시도를 주저하지 않음.')}[cv.en]||'';
+  const ta=h('textarea',{rows:'3',style:{border:'1.5px solid #d1ece8',borderRadius:'10px',fontSize:'13px',lineHeight:'1.6',fontFamily:'inherit',background:'#fff',padding:'10px 14px',width:'100%',outline:'none',boxSizing:'border-box',resize:'vertical'}});
+  if(cvPh)ta.setAttribute('placeholder',cvPh);
+  ta.value=D[tk]||'';
+  ta.addEventListener('input',e=>{D[tk]=e.target.value;updateNav();updateSubmitBar()});
+  ta.addEventListener('focus',()=>ta.style.borderColor=cv.color);
+  ta.addEventListener('blur',()=>ta.style.borderColor='#d1ece8');
+  card.appendChild(ta);
+  return card;
+}
+
+// ── 점수 평가 카드 (한 축) ──
+function rScore(sec){
+  const ax=sec.ax,m=sec.mode,self=m==='self';
+  const wrap=h('div',null);
+  // 질문
+  const q=h('div',{className:'field'});
+  const ql=h('label',null,self?ax.selfQ:ax.evalQ);ql.appendChild(h('span',{className:'req'},' *'));
+  q.appendChild(ql);
+  const ta=h('textarea',{rows:'4'});ta.value=D[ax.key+'_text']||'';
+  if(ax.ph)ta.setAttribute('placeholder',ax.ph);
+  ta.addEventListener('input',e=>{D[ax.key+'_text']=e.target.value;updateNav();updateSubmitBar()});
+  q.appendChild(ta);wrap.appendChild(q);
+  // 기본점수 (1~5 루브릭)
+  const bk=ax.key+'_base';
+  const bl=h('div',{className:'score-label'},self?'위 기재한 내용에 대한 셀프 평가를 해주세요':'기본 점수 (1~5)');bl.appendChild(h('span',{className:'req'},' *'));wrap.appendChild(bl);
+  const grid=h('div',{className:'rubric-grid'});
+  ax.rubric.forEach((desc,idx)=>{
+    const n=5-idx; // 5점이 맨 위
+    const a=D[bk]===n;
+    const it=h('div',{className:'rubric-item'+(a?' active':''),onClick:()=>{D[bk]=n;reRenderSection(sec.id);updateNav();updateSubmitBar()}});
+    if(!self)it.appendChild(h('span',{className:'rb-n'},n+'점'));
+    it.appendChild(h('span',{className:'rb-d'},desc));
+    grid.appendChild(it);
+  });
+  wrap.appendChild(grid);
+  // 평가자: 해결/실행 시도 추가점
+  if(!self){
+    const ak=ax.key+'_add';
+    wrap.appendChild(h('div',{className:'score-label'},'+ 해결·실행 시도 가산 (0~2)',h('span',{className:'req'},' *')));
+    const arow=h('div',{className:'add-row'});
+    ADD.forEach(a=>{
+      const on=D[ak]===a.v;
+      const b=h('div',{className:'add-item'+(on?' active':''),onClick:()=>{D[ak]=a.v;reRenderSection(sec.id);updateNav();updateSubmitBar()}});
+      b.appendChild(h('span',{className:'ad-v'},'+'+a.v));
+      b.appendChild(h('span',{className:'ad-l'},a.l));
+      b.appendChild(h('span',{className:'ad-d'},a.d));
+      arow.appendChild(b);
+    });
+    wrap.appendChild(arow);
+  }
+  // 이 축 점수 + (마무리) 중간 대비 변화 — 셀프에는 점수를 노출하지 않음
+  if(!self){
+    const sc=axisScore(ax,m);
+    const scBox=h('div',{className:'axis-score'});
+    scBox.appendChild(h('span',{className:'as-label'},'이 항목 점수'));
+    scBox.appendChild(h('span',{className:'as-val'},(sc===null?'—':sc)+' / 20'));
+    if(sec.phaseTag==='final'){
+      const mid=loadMidScores(m);
+      if(mid&&mid.scores&&mid.scores[ax.key]!=null){
+        scBox.appendChild(rDelta(mid.scores[ax.key],sc));
+      }else{
+        scBox.appendChild(h('span',{className:'as-nomid'},'중간 점수 없음'));
+      }
+    }
+    wrap.appendChild(scBox);
+  }
+  return wrap;
+}
+// 변화 배지
+function rDelta(prev,cur){
+  if(cur===null)return h('span',{className:'delta delta-none'},'중간 '+prev+'점');
+  const d=cur-prev;
+  const cls=d>0?'delta-up':d<0?'delta-down':'delta-same';
+  const arrow=d>0?'▲':d<0?'▼':'＝';
+  const txt=d>0?('중간 '+prev+' → '+cur+'  '+arrow+'+'+d):d<0?('중간 '+prev+' → '+cur+'  '+arrow+d):('중간과 동일 '+cur);
+  return h('span',{className:'delta '+cls},txt);
+}
+// 종합 점수 대시보드
+function rScoreDash(m){
+  const self=m==='self';
+  const box=h('div',{className:'dash'});
+  const tot=totalScore(m);
+  const g=gradeOf(tot.sum);
+  box.appendChild(h('div',{className:'dash-total'},h('span',{className:'dt-num'},String(tot.sum)),h('span',{className:'dt-max'},' / 100')));
+  box.appendChild(h('div',{className:'dash-grade'},'권장 등급  '+g.g+'. '+g.l));
+  // 항목별 막대
+  const list=h('div',{className:'dash-list'});
+  const mid=loadMidScores(m);
+  AXES.forEach(ax=>{
+    const sc=axisScore(ax,m);
+    const row=h('div',{className:'dash-row'});
+    row.appendChild(h('span',{className:'dr-name'},ax.icon+' '+ax.t.split(' ')[0]));
+    const barWrap=h('div',{className:'dr-bar'});
+    const fill=h('div',{className:'dr-fill',style:{width:((sc||0)/20*100)+'%'}});barWrap.appendChild(fill);
+    row.appendChild(barWrap);
+    row.appendChild(h('span',{className:'dr-val'},(sc===null?'—':sc)));
+    if(phase==='final'&&mid&&mid.scores&&mid.scores[ax.key]!=null&&sc!==null){
+      const d=sc-mid.scores[ax.key];
+      row.appendChild(h('span',{className:'dr-delta '+(d>0?'delta-up':d<0?'delta-down':'delta-same')},d>0?('+'+d):d<0?String(d):'='));
+    }
+    list.appendChild(row);
+  });
+  box.appendChild(list);
+  if(phase==='final'&&mid&&mid.total!=null){
+    const d=tot.sum-mid.total;
+    box.appendChild(h('div',{className:'dash-compare'},'중간 총점 '+mid.total+'점 → 마무리 '+tot.sum+'점  '+(d>0?('▲ +'+d+' 개선'):d<0?('▼ '+d):'동일')));
+  }
+  return box;
+}
+function renderSectionCard(sec,idx){
+  const ss=getSections();
+  const card=h('div',{className:'card',id:'sec-'+sec.id});
+  const ch2=h('div',{className:'card-header'}),td=h('div');
+  td.appendChild(h('h3',null,sec.t));
+  if(sec.sub)td.appendChild(h('div',{className:'card-sub'},sec.sub));
+  ch2.appendChild(td);
+  ch2.appendChild(h('span',{className:'step'},(idx+1)+' / '+ss.length));
+  card.appendChild(ch2);
+  const bd=h('div',{className:'card-body'});
+  if(sec.tp==='cv'){
+    bd.appendChild(rScaleGuide(SI));
+    CV.forEach(v=>bd.appendChild(rCV(v,sec.mode)));
+  } else if(sec.tp==='score'){
+    bd.appendChild(rScore(sec));
+  } else if(sec.tp==='goalset'){
+    sec.f.forEach(f=>bd.appendChild(rField(f)));
+  } else if(sec.tp==='goal'){
+    sec.f.forEach(f=>bd.appendChild(rField(f)));
+  } else if(sec.tp==='final'){
+    if(sec.mode!=='self'){bd.appendChild(rScoreDash(sec.mode));bd.appendChild(rHire());}
+    sec.f.forEach(f=>bd.appendChild(rField(f)));
+  } else if(sec.f){
+    sec.f.forEach(f=>bd.appendChild(rField(f)));
+  }
+  card.appendChild(bd);
+  return card;
+}
+function reRenderSection(secId){
+  const ss=getSections();
+  const idx=ss.findIndex(s=>s.id===secId);
+  if(idx<0)return;
+  const old=document.getElementById('sec-'+secId);
+  if(!old)return;
+  old.replaceWith(renderSectionCard(ss[idx],idx));
+  // 점수 축이 바뀌면 종합 대시보드(final)도 갱신
+  if(secId.indexOf('ax_')===0){
+    const fi=ss.findIndex(s=>s.tp==='final');
+    if(fi>=0){const fEl=document.getElementById('sec-'+ss[fi].id);if(fEl)fEl.replaceWith(renderSectionCard(ss[fi],fi))}
+  }
+}
+function updateNav(){
+  const pills=document.querySelectorAll('.nav-pill');
+  const ss=getSections();
+  pills.forEach((pill,i)=>{
+    const filled=isSectionFilled(ss[i]);
+    pill.className='nav-pill'+(i===activeNav?' active':'')+(filled&&i!==activeNav?' filled':'');
+  });
+  updateProgress();
+}
+function updateSubmitBar(){
+  const btn=document.getElementById('submitBtn');const info=document.getElementById('submitInfo');
+  if(!btn||!info)return;
+  const fc=filledCount(),total=getSections().length;
+  btn.disabled=!allFilled()||saving;
+  btn.textContent=saving?'저장 중...':'제출하기 ✓';
+  info.innerHTML=fc===total?'<span class="done-count">✓ 모든 섹션 작성 완료</span>':'작성 완료 <span class="count">'+fc+' / '+total+'</span> 섹션';
+}
+function updateProgress(){
+  const bar=document.getElementById('progressFill');if(!bar)return;
+  const fc=filledCount(),total=getSections().length;
+  bar.style.width=(fc/total*100)+'%';
+}
+function setupScrollSpy(){
+  const ss=getSections();
+  const observer=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        const id=entry.target.id.replace('sec-','');
+        const idx=ss.findIndex(s=>s.id===id);
+        if(idx>=0&&idx!==activeNav){
+          activeNav=idx;updateNav();
+          const pill=document.querySelectorAll('.nav-pill')[idx];
+          if(pill)pill.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+        }
+      }
+    });
+  },{rootMargin:'-120px 0px -60% 0px',threshold:0.1});
+  ss.forEach(s=>{const el=document.getElementById('sec-'+s.id);if(el)observer.observe(el)});
+}
+window.addEventListener('scroll',()=>{const btn=document.getElementById('scrollTopBtn');if(btn)btn.className='scroll-top'+(window.scrollY>400?' show':'')});
+
+// ═══ Main Render ═══
+function R(){
+  const app=document.getElementById('app');app.innerHTML='';
+  // Gate (평가자: 코드 인증)
+  if(!authEmail){
+    const g=h('div',{className:'gate'}),inner=h('div',{style:{maxWidth:'420px',width:'100%'}});
+    inner.appendChild(h('div',{className:'tag'},'GNA COMPANY'));
+    inner.appendChild(h('h1',null,'온보딩 리뷰 (리드/동료)'));
+    inner.appendChild(h('p',{className:'sub'},'새로운 동료의 적응과 성장을 평가하는 시간입니다'));
+    const f1=h('div',{className:'gate-field'});f1.appendChild(h('div',{className:'gate-label'},'사내 이메일'));
+    const inp1=h('input',{className:'gate-input',type:'email',placeholder:'name@gna.company'});f1.appendChild(inp1);inner.appendChild(f1);
+    const f2=h('div',{className:'gate-field'});f2.appendChild(h('div',{className:'gate-label'},'개인 인증 코드'));
+    const inp2=h('input',{className:'gate-input gate-code',type:'text',placeholder:'코드 6자리',maxlength:'6'});f2.appendChild(inp2);inner.appendChild(f2);
+    const err=h('div',{className:'gate-error'});inner.appendChild(err);
+    inp2.addEventListener('keydown',e=>{if(e.key==='Enter')tryAuth()});
+    inner.appendChild(h('button',{className:'gate-btn',onClick:tryAuth},'입장하기'));
+    g.appendChild(inner);app.appendChild(g);setTimeout(()=>inp1.focus(),100);
+    function tryAuth(){
+      const email=inp1.value.trim().toLowerCase(),code=inp2.value.trim().toUpperCase();
+      if(!email){err.textContent='이메일을 입력해주세요';return}
+      if(!code){err.textContent='인증 코드를 입력해주세요';return}
+      const now=new Date(),expiry=new Date(CODE_EXPIRY_DATE+'T23:59:59');
+      if(now>expiry){err.textContent='리뷰 작성 기간이 종료되었습니다. People팀에 문의해주세요.';return}
+      if(!AUTH[email]){err.textContent='등록되지 않은 이메일입니다';return}
+      if(AUTH[email]!==code){err.textContent='인증 코드가 올바르지 않습니다';return}
+      authEmail=email;track='eval';R();
+    }
+    return;
+  }
+  // Mode select (리드 / 동료)
+  if(!mode){
+    const ld=h('div',{className:'landing'}),inner=h('div',{style:{maxWidth:'480px',width:'100%'}});
+    inner.appendChild(h('div',{className:'tag'},'GNA COMPANY'));
+    inner.appendChild(h('h1',null,'리드 / 동료 평가'));
+    inner.appendChild(h('p',{className:'sub'},'작성 주체를 선택해 주세요'));
+    inner.appendChild(h('div',{className:'welcome'},'👋 '+authEmail));
+    const opts=[
+      {m:'lead',t:'리드 평가',d:'팀/스쿼드 리드가 대상자를 평가합니다'},
+      {m:'peer',t:'동료 평가',d:'함께 일한 동료가 대상자를 평가합니다'},
+    ];
+    opts.forEach(o=>{
+      const b=h('button',{className:'mode-btn',onClick:()=>{mode=o.m;R()}});
+      const i=h('div');const lab=h('span',null,o.t);
+      i.appendChild(lab);i.appendChild(h('div',{className:'desc'},o.d));
+      b.appendChild(i);b.appendChild(h('span',{className:'arrow'},'→'));inner.appendChild(b);
+    });
+    ld.appendChild(inner);app.appendChild(ld);return;
+  }
+  // Phase select (중간 / 마무리)
+  if(!phase){
+    const ld=h('div',{className:'landing'}),inner=h('div',{style:{maxWidth:'480px',width:'100%'}});
+    inner.appendChild(h('div',{className:'tag'},'GNA COMPANY'));
+    inner.appendChild(h('h1',null,(mode==='self'?'셀프 리뷰':mode==='lead'?'리드 평가':'동료 평가')));
+    inner.appendChild(h('p',{className:'sub'},'어떤 시점의 리뷰인가요?'));
+    inner.appendChild(h('div',{className:'welcome'},'👋 '+authEmail));
+    function startPhase(p){phase=p;D={};submitted=false;const dr=loadDraft();if(dr){if(confirm('이전에 임시저장된 내용이 있습니다. 이어서 작성하시겠습니까?')){D=dr.data||{}}else{clearDraft()}}R()}
+    const b1=h('button',{className:'mode-btn',onClick:()=>startPhase('mid')});
+    const i1=h('div');const l1=h('span',null,'중간 리뷰');
+    if(hasDraft('mid',mode))l1.appendChild(h('span',{className:'draft-badge'},'임시저장 있음'));
+    i1.appendChild(l1);i1.appendChild(h('div',{className:'desc'},'수습 중간 시점 · 적응 점검 + 수습 목표 설정'));
+    b1.appendChild(i1);b1.appendChild(h('span',{className:'arrow'},'→'));inner.appendChild(b1);
+    const b2=h('button',{className:'mode-btn',onClick:()=>startPhase('final')});
+    const i2=h('div');const l2=h('span',null,'마무리 리뷰');
+    if(hasDraft('final',mode))l2.appendChild(h('span',{className:'draft-badge'},'임시저장 있음'));
+    i2.appendChild(l2);i2.appendChild(h('div',{className:'desc'},'수습 종료 시점 · 목표 달성 평가 + 본채용 의견'));
+    b2.appendChild(i2);b2.appendChild(h('span',{className:'arrow'},'→'));inner.appendChild(b2);
+    const back=h('button',{className:'exit-btn',style:{marginTop:'12px'},onClick:()=>{mode=null;R()}},'← 작성 주체 다시 선택');
+    inner.appendChild(back);
+    ld.appendChild(inner);app.appendChild(ld);return;
+  }
+  // Submitted
+  if(submitted){
+    const dn=h('div',{className:'done'}),inner=h('div',{style:{maxWidth:'420px'}});
+    inner.appendChild(h('div',{className:'icon'},'✅'));
+    inner.appendChild(h('h2',null,'제출 완료'));
+    const label=(phase==='mid'?'중간':'마무리')+' '+(mode==='self'?'셀프 리뷰':mode==='lead'?'리드 평가':'동료 평가');
+    inner.appendChild(h('p',null,label+'가 성공적으로 제출되었습니다.'));
+    inner.appendChild(h('button',{onClick:()=>{phase=null;mode=null;D={};submitted=false;activeNav=0;R()}},'처음으로 돌아가기'));
+    dn.appendChild(inner);app.appendChild(dn);return;
+  }
+  // ═══ FORM ═══
+  const ss=getSections();
+  const modeLabel=(mode==='self'?'셀프 리뷰':mode==='lead'?'리드 평가':'동료 평가');
+  // Header
+  const hdr=h('div',{className:'header'}),hi=h('div',{className:'header-inner'}),tp=h('div',{className:'top'}),ld2=h('div');
+  ld2.appendChild(h('div',{className:'brand'},'GNA COMPANY · 온보딩 리뷰'));
+  ld2.appendChild(h('h2',null,(phase==='mid'?'중간 리뷰':'마무리 리뷰')+' · '+modeLabel));
+  tp.appendChild(ld2);
+  const btns=h('div',{className:'header-btns'});
+  btns.appendChild(h('button',{className:'save-btn',onClick:()=>{saveDraft();showToast('💾 임시저장 완료')}},'임시저장'));
+  btns.appendChild(h('button',{className:'exit-btn',onClick:()=>{saveDraft();if(confirm('임시저장 후 나가시겠습니까?')){phase=null;mode=null;activeNav=0;R()}}},'나가기'));
+  tp.appendChild(btns);hi.appendChild(tp);
+  const pb=h('div',{className:'progress-bar'});pb.appendChild(h('div',{className:'progress-fill',id:'progressFill',style:{width:(filledCount()/ss.length*100)+'%'}}));
+  hi.appendChild(pb);hdr.appendChild(hi);app.appendChild(hdr);
+  // Nav pills
+  const nav=h('div',{className:'section-nav'}),navIn=h('div',{className:'nav-inner'});
+  ss.forEach((sec,i)=>{
+    const filled=isSectionFilled(sec);
+    const pill=h('button',{className:'nav-pill'+(i===0?' active':'')+(filled?' filled':''),
+      onClick:()=>{activeNav=i;const target=document.getElementById('sec-'+sec.id);if(target)target.scrollIntoView({behavior:'smooth',block:'start'});updateNav();}
+    },sec.nav||sec.t);
+    navIn.appendChild(pill);
+  });
+  nav.appendChild(navIn);app.appendChild(nav);
+  // Content
+  const ct=h('div',{className:'content'});
+  // Phase banner
+  const banner=h('div',{className:'phase-banner'});
+  banner.appendChild(h('div',{className:'pb-t'},phase==='mid'?'🌱 수습 중간 리뷰':'🎯 수습 마무리 리뷰'));
+  banner.appendChild(h('div',{className:'pb-d'},phase==='mid'?'적응 상태를 점검하고, 리드와 대상자가 합의하여 남은 수습 기간의 목표를 설정합니다.':'중간 리뷰에서 설정한 수습 목표의 달성도를 평가하고 본채용 적합 여부를 판단합니다.'));
+  ct.appendChild(banner);
+  ss.forEach((sec,idx)=>{
+    ct.appendChild(renderSectionCard(sec,idx));
+    if(idx<ss.length-1)ct.appendChild(h('div',{className:'section-divider'}));
+  });
+  app.appendChild(ct);
+  // Submit bar
+  const sb=h('div',{className:'submit-bar'}),si=h('div',{className:'submit-inner'});
+  const fc=filledCount();
+  const infoEl=h('div',{className:'submit-info',id:'submitInfo'});
+  infoEl.innerHTML=fc===ss.length?'<span class="done-count">✓ 모든 섹션 작성 완료</span>':'작성 완료 <span class="count">'+fc+' / '+ss.length+'</span> 섹션';
+  si.appendChild(infoEl);
+  const submitBtn=h('button',{className:'btn-submit',id:'submitBtn',onClick:submit},'제출하기 ✓');
+  if(!allFilled())submitBtn.disabled=true;
+  si.appendChild(submitBtn);
+  sb.appendChild(si);app.appendChild(sb);
+  requestAnimationFrame(()=>setupScrollSpy());
+}
+R();
+</script>
+</body>
+</html>
