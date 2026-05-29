@@ -26,7 +26,7 @@ function doPost(e) {
         '총점(평가자)',
         '성과점수', '문제해결점수', '협업점수', '학습점수', '핵심가치점수',
         '대상자/닉네임', '소속', '입사일',
-        '수습목표', '목표-무엇을했나',
+        '수습목표', '목표-진행상황(중간)', '목표-무엇을했나(마무리)',
         '성과-서술', '문제해결-서술', '협업-서술', '학습-서술', '핵심가치-서술',
         '종합의견', '본채용의견',
         '원본JSON'
@@ -50,6 +50,7 @@ function doPost(e) {
       data.team || data.targetTeam || '',
       data.joinDate || '',
       data.goalText || data.goalRef || '',
+      data.goalProgress || '',
       data.goalReason || '',
       data.perf_text || '',
       data.prob_text || '',
