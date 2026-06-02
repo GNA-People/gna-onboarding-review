@@ -102,6 +102,12 @@ body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,sans-serif;backgr
 .dt-num{font-size:46px;font-weight:800;color:#2dd4bf;line-height:1}
 .dt-max{font-size:18px;color:#64748b}
 .dash-grade{text-align:center;font-size:14px;font-weight:700;color:#5eead4;margin-bottom:18px}
+.dash-verdict{display:flex;align-items:center;justify-content:center;gap:8px;font-size:14px;font-weight:700;padding:9px 16px;border-radius:24px;margin:0 auto 18px;width:fit-content}
+.dash-verdict .vd-mark{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:13px}
+.vd-pass{background:rgba(45,212,191,.15);color:#5eead4}
+.vd-pass .vd-mark{background:#0d9488;color:#fff}
+.vd-fail{background:rgba(248,113,113,.12);color:#fca5a5}
+.vd-fail .vd-mark{background:#b91c1c;color:#fff}
 .dash-list{display:flex;flex-direction:column;gap:9px}
 .dash-row{display:flex;align-items:center;gap:10px}
 .dr-name{flex-shrink:0;width:88px;font-size:12px;color:#cbd5e1}
@@ -309,7 +315,7 @@ function midSections(mode){
   const S=[infoSec(mode)];
   // 1) 수습 목표 설정
   S.push({id:"m0",t:"Section 1. 수습기간 목표 중간 점검",nav:"수습 목표",sub:self?"입사 후 2주 안에 리드와 설정한 수습 목표를 옮겨 적고, 지금까지의 진행 상황을 중간 점검합니다.":"입사 후 2주 안에 리드와 설정한 수습 목표를 옮겨 적고, 대상자의 진행 상황을 중간 점검합니다.",tp:"goalset",mode:mode,f:[
-    {k:"goalText",l:self?"📌 입사 후 2주 내 리드와 설정한 수습 목표":"📌 대상자가 입사 후 2주 내 리드와 설정한 수습 목표",hint:"새로 정하는 것이 아니라, 이미 합의된 목표를 그대로 옮겨 적어주세요. (노션 등 링크 대체 가능)",ph:"예) ① 담당 채널 단독 운영 (~6월 말)\n② 주간 리포트 정례화 및 공유\n③ ○○ 캠페인 1건 직접 운영(리드는 검토만)",tp:"ta"},{k:"goalProgress",l:self?"지금까지의 진행 상황 (중간 점검)":"지금까지 대상자의 진행 상황 (중간 점검)",hint:"목표별로 현재 어디까지 와 있는지 간단히 적어주세요.",ph:"예) ① 채널 운영 — 리드 검토 받으며 진행 중\n② 리포트 — 양식 완성, 격주 공유 중\n③ 캠페인 — 준비 단계",tp:"ta"}]});
+    {k:"goalText",l:self?"📌 입사 후 2주 내 리드와 설정한 수습 목표":"📌 대상자가 입사 후 2주 내 리드와 설정한 수습 목표",hint:"리드(팀·스쿼드)와 설정한 목표를 작성합니다. (노션 등 링크 대체 가능)",ph:"예) ① 담당 채널 단독 운영 (~6월 말)\n② 주간 리포트 정례화 및 공유\n③ ○○ 캠페인 1건 직접 운영(리드는 검토만)",tp:"ta"},{k:"goalProgress",l:self?"지금까지의 진행 상황 (중간 점검)":"지금까지 대상자의 진행 상황 (중간 점검)",hint:"목표별로 현재 어디까지 와 있는지 간단히 적어주세요.",ph:"예) ① 채널 운영 — 리드 검토 받으며 진행 중\n② 리포트 — 양식 완성, 격주 공유 중\n③ 캠페인 — 준비 단계",tp:"ta"}]});
   // 2) 점수화 평가 5축
   AXES.forEach((ax,i)=>S.push(scoreSec(ax,i+2,mode,'mid')));
   return S;
@@ -497,22 +503,6 @@ function rScore(sec){
     });
     wrap.appendChild(arow);
   }
-  // 이 축 점수 + (마무리) 중간 대비 변화 — 셀프에는 점수를 노출하지 않음
-  if(!self){
-    const sc=axisScore(ax,m);
-    const scBox=h('div',{className:'axis-score'});
-    scBox.appendChild(h('span',{className:'as-label'},'이 항목 점수'));
-    scBox.appendChild(h('span',{className:'as-val'},(sc===null?'—':sc)+' / 20'));
-    if(sec.phaseTag==='final'){
-      const mid=loadMidScores(m);
-      if(mid&&mid.scores&&mid.scores[ax.key]!=null){
-        scBox.appendChild(rDelta(mid.scores[ax.key],sc));
-      }else{
-        scBox.appendChild(h('span',{className:'as-nomid'},'중간 점수 없음'));
-      }
-    }
-    wrap.appendChild(scBox);
-  }
   return wrap;
 }
 // 변화 배지
@@ -529,9 +519,13 @@ function rScoreDash(m){
   const self=m==='self';
   const box=h('div',{className:'dash'});
   const tot=totalScore(m);
-  const g=gradeOf(tot.sum);
+  const pass=tot.sum>=80;
   box.appendChild(h('div',{className:'dash-total'},h('span',{className:'dt-num'},String(tot.sum)),h('span',{className:'dt-max'},' / 100')));
-  box.appendChild(h('div',{className:'dash-grade'},'권장 등급  '+g.g+'. '+g.l));
+  // 80점 기준 본채용 판정 배지
+  const verdict=h('div',{className:'dash-verdict '+(pass?'vd-pass':'vd-fail')});
+  verdict.appendChild(h('span',{className:'vd-mark'},pass?'✓':'!'));
+  verdict.appendChild(h('span',null,pass?'본채용 기준 충족 (80점 이상)':'본채용 기준 미달 (80점 미만)'));
+  box.appendChild(verdict);
   // 항목별 막대
   const list=h('div',{className:'dash-list'});
   const mid=loadMidScores(m);
