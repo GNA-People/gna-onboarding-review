@@ -332,7 +332,7 @@ function finalSections(mode){
   // 2) 점수화 평가 5축 (중간 점수 대비 변화 표시)
   AXES.forEach((ax,i)=>S.push(scoreSec(ax,i+2,mode,'final')));
   // 3) 종합 + (평가자) 본채용 의견
-  S.push({id:"f9",t:"Section 7. 종합 평가"+(self?"":" & 본채용 의견"),nav:self?"종합 평가":"종합·본채용",sub:self?"수습 기간을 마무리하며 스스로를 돌아봐 주세요.":"총점을 확인하고, 본채용 적합 여부를 판단해 주세요.",tp:"final",mode:mode,f:[
+  S.push({id:"f9",t:"Section 7. 종합 평가"+(self?"":" & 본채용 의견"),nav:self?"종합 평가":"종합·본채용",sub:self?"수습 기간을 마무리하며 스스로를 돌아봐 주세요.":"수습 기간 전반을 종합하여 본채용 적합 여부를 판단해 주세요.",tp:"final",mode:mode,f:[
     {k:"f9q1",l:self?"내 점수에 대한 생각과, 앞으로 더 성장시키고 싶은 부분을 적어주세요.":"총점·본채용 의견의 근거를 적어주세요.",hint:self?"잘한 점과 앞으로의 방향을 함께 적으면 됩니다.":"보류·부적합일 경우 주요 사유를 반드시 작성해 주세요. 점수가 낮은 축과 연결해 적으면 근거가 분명해집니다.",ph:self?"예) 성과·협업은 자신 있고, 문제 해결력은 더 키우고 싶습니다.":"예) 협업·성과 우수, 문제해결은 중간 대비 개선됨. 정규 전환 적합.",tp:"ta"}]});
   return S;
 }
@@ -570,7 +570,7 @@ function renderSectionCard(sec,idx){
   } else if(sec.tp==='goal'){
     sec.f.forEach(f=>bd.appendChild(rField(f)));
   } else if(sec.tp==='final'){
-    if(sec.mode!=='self'){bd.appendChild(rScoreDash(sec.mode));bd.appendChild(rHire());}
+    if(sec.mode!=='self')bd.appendChild(rHire());
     sec.f.forEach(f=>bd.appendChild(rField(f)));
   } else if(sec.f){
     sec.f.forEach(f=>bd.appendChild(rField(f)));
@@ -585,11 +585,6 @@ function reRenderSection(secId){
   const old=document.getElementById('sec-'+secId);
   if(!old)return;
   old.replaceWith(renderSectionCard(ss[idx],idx));
-  // 점수 축이 바뀌면 종합 대시보드(final)도 갱신
-  if(secId.indexOf('ax_')===0){
-    const fi=ss.findIndex(s=>s.tp==='final');
-    if(fi>=0){const fEl=document.getElementById('sec-'+ss[fi].id);if(fEl)fEl.replaceWith(renderSectionCard(ss[fi],fi))}
-  }
 }
 function updateNav(){
   const pills=document.querySelectorAll('.nav-pill');
