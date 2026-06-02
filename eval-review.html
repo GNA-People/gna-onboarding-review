@@ -139,7 +139,7 @@ body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,sans-serif;backgr
 .grade-item .gl{font-size:12px;font-weight:600;color:#0f172a;margin-left:4px}
 .grade-item .gd{font-size:11px;color:#5b7c79;margin-top:3px;line-height:1.4}
 /* ── Hire decision ── */
-.hire-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.hire-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px}
 .hire-item{padding:14px 10px;border-radius:10px;background:#fff;border:2px solid #d1ece8;cursor:pointer;transition:all .15s;text-align:center}
 .hire-item:hover{border-color:#5eead4}
 .hire-item.active.fit{border-color:#059669;background:#ecfdf5}
@@ -225,7 +225,7 @@ const OS=[{n:1,l:"기대 미달",d:"기대 수준에 크게 못 미치며, 즉�
 const GG=[{g:"A",l:"기대를 크게 상회",d:"수습 기간 동안 기대 이상의 적응과 성과를 보였으며, 즉시 핵심 기여자로 활약 가능"},{g:"B",l:"안정적으로 적합",d:"수습 목표를 충실히 달성했고, 신뢰할 수 있는 정규 구성원으로 함께할 수 있음"},{g:"C",l:"조건부/추가 관찰 필요",d:"일부 강점은 있으나, 본채용 전 보완·확인이 필요한 영역이 남아있음"},{g:"D",l:"기대에 미흡",d:"수습 목표 대비 적응·성과가 크게 부족하여 본채용이 어려움"}];
 
 // 본채용 의견
-const HIRE=[{v:"적합",cls:"fit",l:"적합",d:"정규 동료로 함께"},{v:"보류",cls:"hold",l:"보류",d:"추가 관찰 필요"},{v:"부적합",cls:"unfit",l:"부적합",d:"본채용 어려움"}];
+const HIRE=[{v:"적합",cls:"fit",l:"적합",d:"정규 동료로 함께"},{v:"부적합",cls:"unfit",l:"부적합",d:"본채용 어려움"}];
 
 // ═══ 점수화 모델 ═══════════════════════════════════════════
 // 5개 평가축 × 20점 = 100점. 각 문항: 기본점수(1~5 루브릭) + (평가자) 시도 추가점(0~2)
