@@ -336,10 +336,10 @@ function infoSec(mode){
     {k:"team",l:"소속(팀명)",tp:"text"},
     {k:"joinDate",l:"입사일",tp:"date"}]};
   return {id:"info",t:"기본 정보",nav:"기본정보",f:[
-    {k:"targetName",l:"대상자 이름(닉네임)",tp:"text"},
-    {k:"targetTeam",l:"대상자 소속(팀명)",tp:"text"},
-    {k:"reviewerName",l:(mode==='lead'?'리드':'동료')+" 이름(닉네임)",tp:"text"},
-    {k:"reviewerTeam",l:(mode==='lead'?'리드':'동료')+" 소속(팀명)",tp:"text"}]};
+    {k:"targetName",l:"온보딩 대상자 이름(닉네임)",tp:"text",hint:"평가받는 신규 입사자입니다."},
+    {k:"targetTeam",l:"온보딩 대상자 소속(팀명)",tp:"text"},
+    {k:"reviewerName",l:(mode==='lead'?'리드':'동료')+" 본인 이름(닉네임)",tp:"text",hint:"작성하시는 분(평가자) 본인입니다."},
+    {k:"reviewerTeam",l:(mode==='lead'?'리드':'동료')+" 본인 소속(팀명)",tp:"text"}]};
 }
 
 // ═══ 핵심가치 / 종합 섹션 빌더 ═══
