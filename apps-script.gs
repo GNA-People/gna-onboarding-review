@@ -82,7 +82,7 @@ var SELF_HEADER = [
 var EVAL_HEADER = [
   '제출시각','작성주체','시점(phase)','작성자이메일','총점',
   '성과','오너십','협업','용기·성장','핵심가치',
-  '대상자닉네임','대상자소속',
+  '온보딩대상자닉네임','온보딩대상자소속',
   '수습목표','목표-진행(중간)','목표-실행(마무리)',
   '성과-서술','오너십-서술','협업-서술','용기·성장-서술','핵심가치-서술',
   '종합의견','본채용의견','원본JSON'
@@ -121,6 +121,22 @@ function setup() {
   });
   Logger.log('응답 스프레드시트 URL: ' + ss.getUrl());
   return ss.getUrl();
+}
+
+
+// 기존 탭의 헤더(1행)를 최신 정의로 다시 쓰기 (데이터는 유지)
+function refreshHeaders() {
+  var ss = getSS_();
+  setHeader_(ss, SELF_SHEET, SELF_HEADER);
+  setHeader_(ss, EVAL_SHEET, EVAL_HEADER);
+  setHeader_(ss, ROSTER_SHEET, ROSTER_HEADER);
+  setHeader_(ss, DASH_SHEET, DASH_HEADER);
+  setHeader_(ss, CODE_SHEET, CODE_HEADER);
+  Logger.log('헤더 갱신 완료');
+}
+function setHeader_(ss, name, header) {
+  var sh = ss.getSheetByName(name); if(!sh) return;
+  sh.getRange(1,1,1,header.length).setValues([header]);
 }
 
 // === 진단용: 마스터 시트 접근 테스트 ===
