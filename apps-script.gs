@@ -281,6 +281,20 @@ function fmt_(d){
   return Utilities.formatDate(x, Session.getScriptTimeZone(), 'yyyy-MM-dd');
 }
 
+// === 테스트: 폼 없이 더미 응답을 직접 기록 ===
+function testPost() {
+  var fake = { postData: { contents: JSON.stringify({
+    _form:'self', _phase:'mid', _type:'self', _email:'test@gna.company',
+    _total:72, _scores:{perf:16,prob:12,collab:16,learn:16,value:12},
+    name:'테스트', team:'피플팀', joinDate:'2026-05-01',
+    goalText:'테스트 목표', goalProgress:'진행중',
+    perf_text:'a', prob_text:'b', collab_text:'c', learn_text:'d', value_text:'e',
+    f9q1:'회고 테스트'
+  })}};
+  var r = doPost(fake);
+  Logger.log('testPost 결과: ' + r.getContent());
+}
+
 // ===== 응답 수신 =====
 function doPost(e) {
   try {
