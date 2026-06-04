@@ -17,6 +17,7 @@
  */
 
 var PROP_KEY = 'SPREADSHEET_ID';
+var FIXED_SS_ID = '1SAlqXcFerOR277xhp5YCGQQPfjZ2t6aQPoU5HTQLPsE'; // 지금 사용하는 응답 시트로 고정
 var SELF_SHEET = '셀프리뷰';
 var EVAL_SHEET = '리드·동료평가';
 var ROSTER_SHEET = '온보딩대상자';
@@ -92,8 +93,12 @@ var CODE_HEADER = ['닉네임','이메일','개별코드'];
 
 function getSS_() {
   var props = PropertiesService.getScriptProperties();
-  var id = props.getProperty(PROP_KEY), ss = null;
-  if (id) { try { ss = SpreadsheetApp.openById(id); } catch(e){ ss=null; } }
+  var ss = null;
+  // 1) 고정 ID 우선
+  if (FIXED_SS_ID) { try { ss = SpreadsheetApp.openById(FIXED_SS_ID); } catch(e){ ss=null; } }
+  // 2) 없으면 속성에 저장된 ID
+  if (!ss) { var id = props.getProperty(PROP_KEY); if (id) { try { ss = SpreadsheetApp.openById(id); } catch(e){ ss=null; } } }
+  // 3) 그래도 없으면 새로 생성
   if (!ss) { ss = SpreadsheetApp.create('GNA 온보딩 리뷰 응답'); props.setProperty(PROP_KEY, ss.getId()); }
   ensure_(ss, SELF_SHEET, SELF_HEADER);
   ensure_(ss, EVAL_SHEET, EVAL_HEADER);
