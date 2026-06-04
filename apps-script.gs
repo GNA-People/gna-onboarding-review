@@ -21,6 +21,7 @@ var SELF_SHEET = '셀프리뷰';
 var EVAL_SHEET = '리드·동료평가';
 var ROSTER_SHEET = '온보딩대상자';
 var DASH_SHEET = '대시보드';
+var CODE_SHEET = '평가자코드';
 
 // 마스터 인명부 스프레드시트 ID & 탭 이름
 var MASTER_SHEET_ID = '1Y8P_SmeaHk6NBcWfTQ_tljKQzyQSJb63v-LtE5fDsh8';
@@ -69,8 +70,9 @@ var EVAL_HEADER = [
   '성과-서술','오너십-서술','협업-서술','용기·성장-서술','핵심가치-서술',
   '종합의견','본채용의견','원본JSON'
 ];
-var ROSTER_HEADER = ['닉네임','이름','팀','회사이메일','입사일','수습종료일','개별코드','셀프링크','평가자링크'];
+var ROSTER_HEADER = ['닉네임','이름','팀','회사이메일','입사일','수습종료일','셀프링크','평가자링크'];
 var DASH_HEADER = ['닉네임','팀','입사일','셀프(중간)','셀프(마무리)','리드/동료 수','평가 평균총점','본채용 의견'];
+var CODE_HEADER = ['이메일','개별코드'];
 
 function getSS_() {
   var props = PropertiesService.getScriptProperties();
@@ -81,6 +83,7 @@ function getSS_() {
   ensure_(ss, EVAL_SHEET, EVAL_HEADER);
   ensure_(ss, ROSTER_SHEET, ROSTER_HEADER);
   ensure_(ss, DASH_SHEET, DASH_HEADER);
+  ensure_(ss, CODE_SHEET, CODE_HEADER);
   return ss;
 }
 function ensure_(ss, name, header) {
@@ -135,7 +138,6 @@ function refreshOnboarding() {
     if (jd < cutoff) continue;                 // 최근 3개월 이내만
     if (status && String(status).indexOf('퇴사')>=0) continue;
     var email = cEmail!=null ? String(d[cEmail]||'').trim().toLowerCase() : '';
-    var code = AUTH[email] || '';
     rows.push([
       nick,
       cName!=null?d[cName]:'',
@@ -143,7 +145,6 @@ function refreshOnboarding() {
       email,
       fmt_(jd),
       cEnd!=null?fmt_(d[cEnd]):'',
-      code,
       baseUrl+'self-review.html',
       baseUrl+'eval-review.html'
     ]);
@@ -155,8 +156,16 @@ function refreshOnboarding() {
   if (rows.length) rs.getRange(2,1,rows.length,ROSTER_HEADER.length).setValues(rows);
 
   buildDashboard_(ss, rows);
+  fillCodes_(ss);
   Logger.log('온보딩 대상자 ' + rows.length + '명 갱신 완료');
   return rows.length;
+}
+
+function fillCodes_(ss) {
+  var sh = ss.getSheetByName(CODE_SHEET);
+  sh.clearContents(); sh.appendRow(CODE_HEADER);
+  var rows = Object.keys(AUTH).sort().map(function(email){ return [email, AUTH[email]]; });
+  if (rows.length) sh.getRange(2,1,rows.length,2).setValues(rows);
 }
 
 function buildDashboard_(ss, rosterRows) {
