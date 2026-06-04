@@ -161,6 +161,13 @@ function refreshOnboarding() {
   return rows.length;
 }
 
+// 평가자 코드만 단독으로 채우기 (마스터시트 못 읽어도 동작)
+function fillCodesOnly() {
+  var ss = getSS_();
+  fillCodes_(ss);
+  Logger.log('평가자코드 ' + Object.keys(AUTH).length + '건 기록 완료');
+}
+
 function fillCodes_(ss) {
   var sh = ss.getSheetByName(CODE_SHEET);
   sh.clearContents(); sh.appendRow(CODE_HEADER);
