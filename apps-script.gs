@@ -72,7 +72,7 @@ var EVAL_HEADER = [
 ];
 var ROSTER_HEADER = ['닉네임','이름','팀','회사이메일','입사일','수습종료일','셀프링크','평가자링크'];
 var DASH_HEADER = ['닉네임','팀','입사일','셀프(중간)','셀프(마무리)','리드/동료 수','평가 평균총점','본채용 의견'];
-var CODE_HEADER = ['이메일','개별코드'];
+var CODE_HEADER = ['닉네임','이메일','개별코드'];
 
 function getSS_() {
   var props = PropertiesService.getScriptProperties();
@@ -171,8 +171,38 @@ function fillCodesOnly() {
 function fillCodes_(ss) {
   var sh = ss.getSheetByName(CODE_SHEET);
   sh.clearContents(); sh.appendRow(CODE_HEADER);
-  var rows = Object.keys(AUTH).sort().map(function(email){ return [email, AUTH[email]]; });
-  if (rows.length) sh.getRange(2,1,rows.length,2).setValues(rows);
+  var nickMap = emailToNick_();   // 마스터에서 이메일→닉네임
+  var rows = Object.keys(AUTH).sort().map(function(email){
+    return [ nickMap[email] || '', email, AUTH[email] ];
+  });
+  if (rows.length) sh.getRange(2,1,rows.length,CODE_HEADER.length).setValues(rows);
+}
+
+// 마스터 인명부에서 이메일 → 닉네임 매핑 (퇴사자명부도 함께 훑어 보강)
+function emailToNick_() {
+  var map = {};
+  try {
+    var mss = SpreadsheetApp.openById(MASTER_SHEET_ID);
+    ['(신)인명부','(신)퇴사자명부'].forEach(function(tab){
+      var sh = mss.getSheetByName(tab); if(!sh) return;
+      var data = sh.getDataRange().getValues();
+      var hdr=-1, cNick=-1, cEmail=-1;
+      for (var i=0;i<Math.min(6,data.length);i++){
+        var row = data[i].map(function(c){return String(c).replace(/\s/g,'');});
+        var ni = row.indexOf('닉네임');
+        var ei = -1;
+        row.forEach(function(name,idx){ if(name.indexOf('회사')>=0&&name.indexOf('이메일')>=0) ei=idx; });
+        if (ni>=0 && ei>=0){ hdr=i; cNick=ni; cEmail=ei; break; }
+      }
+      if (hdr<0) return;
+      for (var r=hdr+1;r<data.length;r++){
+        var email=String(data[r][cEmail]||'').trim().toLowerCase();
+        var nick=data[r][cNick];
+        if (email && nick) map[email]=nick;
+      }
+    });
+  } catch(e) { /* 마스터 못 읽어도 코드/이메일은 채워짐 */ }
+  return map;
 }
 
 function buildDashboard_(ss, rosterRows) {
