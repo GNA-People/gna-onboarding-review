@@ -54,6 +54,22 @@ var AUTH = {
 "maverick.seo@gna.company":"YMZ7K5","lumi.ko@gna.company":"QE03AZ","sammy.lee@gna.company":"R29W8G"
 };
 
+// 이메일 → 닉네임 (마스터 접근 불가 시 사용)
+var NICK = {
+"wb@gna.company":"Jason","kai.kim@gna.company":"Kai","jay.heo@gna.company":"Jay","eddakim@gna.company":"Edda","min@gna.company":"Minmin","lou@gna.company":"Lou",
+"julie@gna.company":"Julie","eve@gna.company":"Eve","chloe@gna.company":"Chloe","kane@gna.company":"Kane","tommy.kim@gna.company":"Tommy","ellie@gna.company":"Ellie",
+"ina@gna.company":"Ina","veronica.park@gna.company":"Veronica","jimmy@gna.company":"Jimmy","eddie.kim@gna.company":"Eddie","senna.jeong@gna.company":"Senna","hyman.park@gna.company":"Hyman",
+"yosef@gna.company":"Yosef","angie.han@gna.company":"Angie","flicia@gna.company":"Flicia","selene.park@gna.company":"Selene","mary.choi@gna.company":"Mary","seny@gna.company":"Seny",
+"angelique.li@gna.company":"Angelique","kesper.ng@gna.company":"Kesper","sonya.hong@gna.company":"Sonya","liang.wang@gna.company":"Liang","mac.han@gna.company":"Mac","ted.yang@gna.company":"Ted",
+"hailey.jeong@gna.company":"Hailey","randi.ko@gna.company":"Randi","becky.bae@gna.company":"Becky","luka.kim@gna.company":"Luka","rocket.oh@gna.company":"Rocket","ruqe.seo@gna.company":"Ruqe",
+"erica.kim@gna.company":"Erica","liora@gna.company":"Liora","luvon.lee@gna.company":"Luvon","victor.kim@gna.company":"Victor","eren.jang@gna.company":"Eren","josh.sho@gna.company":"Josh",
+"marisol.kim@gna.company":"Marisol","simon.lee@gna.company":"Simon","boyle.seo@gna.company":"Boyle","hayden@gna.company":"Hayden","joy@gna.company":"Joy","may@gna.company":"May",
+"sophia@gna.company":"Sophia","nate.yoo@gna.company":"Nate","moon@gna.company":"Moon","teo.park@gna.company":"Teo","noah.lee@gna.company":"Noah","yuna.pan@gna.company":"Yuna",
+"lexi.sa@gna.company":"Lexi","vana.i@gna.company":"Vana","rosea.li@gna.company":"Rosea","rhea.syn@gna.company":"Sahye","faye.kang@gna.company":"Faye","mima.kang@gna.company":"Mima",
+"lucy.kim@gna.company":"Lucy","claire.tran@gna.company":"Claire","lumi.ko@gna.company":"Lumi","sammy.lee@gna.company":"Sammy","nora.lee@gna.company":"Nora","hannah.kim@gna.company":"Hannah",
+"jj.lee@gna.company":"JJ","raphael.lee@gna.company":"Raphael","bee.lovan@gna.company":"Bee","maverick.seo@gna.company":"Maverick"
+};
+
 var SELF_HEADER = [
   '제출시각','시점(phase)','작성자이메일','총점',
   '성과','오너십','협업','용기·성장','핵심가치',
@@ -178,9 +194,10 @@ function fillCodes_(ss) {
   if (rows.length) sh.getRange(2,1,rows.length,CODE_HEADER.length).setValues(rows);
 }
 
-// 마스터 인명부에서 이메일 → 닉네임 매핑 (퇴사자명부도 함께 훑어 보강)
+// 이메일 → 닉네임 매핑: 내장 NICK 우선, 마스터 접근되면 보강
 function emailToNick_() {
   var map = {};
+  Object.keys(NICK).forEach(function(k){ map[k]=NICK[k]; });
   try {
     var mss = SpreadsheetApp.openById(MASTER_SHEET_ID);
     ['(신)인명부','(신)퇴사자명부'].forEach(function(tab){
@@ -201,7 +218,7 @@ function emailToNick_() {
         if (email && nick) map[email]=nick;
       }
     });
-  } catch(e) { /* 마스터 못 읽어도 코드/이메일은 채워짐 */ }
+  } catch(e) { /* 마스터 못 읽어도 내장 NICK 으로 채워짐 */ }
   return map;
 }
 
