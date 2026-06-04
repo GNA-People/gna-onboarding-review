@@ -118,6 +118,23 @@ function setup() {
   return ss.getUrl();
 }
 
+// === 진단용: 마스터 시트 접근 테스트 ===
+function diagMaster() {
+  try {
+    var mss = SpreadsheetApp.openById(MASTER_SHEET_ID);
+    Logger.log('파일 열기 성공: ' + mss.getName());
+    var tabs = mss.getSheets().map(function(s){return s.getName();});
+    Logger.log('탭 목록: ' + JSON.stringify(tabs));
+    var sh = mss.getSheetByName(MASTER_TAB);
+    if (!sh) { Logger.log('!! 탭 "' + MASTER_TAB + '" 를 찾지 못함. 위 탭 목록과 비교하세요.'); return; }
+    Logger.log('탭 찾음. 1~3행 미리보기:');
+    var d = sh.getRange(1,1,Math.min(3,sh.getLastRow()), Math.min(12,sh.getLastColumn())).getValues();
+    d.forEach(function(r,i){ Logger.log((i+1)+'행: '+JSON.stringify(r)); });
+  } catch(e) {
+    Logger.log('에러: ' + e);
+  }
+}
+
 // 마스터시트에서 최근 N개월 입사자 → 온보딩대상자 탭 채우기 + 대시보드 갱신
 function refreshOnboarding() {
   var ss = getSS_();
